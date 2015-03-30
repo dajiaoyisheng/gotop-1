@@ -16,14 +16,17 @@
 			'containerRadius': 10,						// gotop包裹元素的边框圆角.
 			'containerColor': '#000',					// gotop包裹元素的背景色.
 			'arrowColor': '#fff',						// 箭头元素的背景色.
-			'location': 'right',
-			'locationOffset': 20,
-			'bottomOffset': 10
+			'location': 'right',						// gotop靠哪边.
+			'locationOffset': 20,						// gotop靠边缘的距离.
+			'bottomOffset': 10,							// gotop靠底部的距离.
+			'alwaysVisible': false,						// 是否一直可见.
+			'speed': 'slow',							// 动画速度.
+			'trigger': 500								// 距离顶部多少显示gotop.
 		};
 		// 合并参数.
 		var options = $.extend(defaults, options);
 		// 添加gotop元素.
-		$('body').append('<div class="' + options.containerClass + '"></div>');
+		$('body').append('<div class="' + options.containerClass + '" style="display: none;"></div>');
 		var $gotopContainer = $('.' + options.containerClass);
 		$gotopContainer.html('<div class="' + options.arrowClass + '"></div>');
 		var $gotopArrow = $('.' + options.arrowClass);
@@ -54,15 +57,41 @@
 			};
 		// 设置箭头的css.
 		$gotopArrow.css(arrowStyle);
+		// 滚动事件.
+		if(!options.alwaysVisible) {
+			$(window).scroll(function() {
+				if($(window).scrollTop() >= options.trigger) {
+					$gotopContainer.show();
+				} else {
+					$gotopContainer.hide();
+				}
+			});
+		} else {
+			$gotopContainer.show();
+		}
+		// 单击事件.
+		var notClicked = true;
+		$gotopContainer.click(function() {
+			if(notClicked) {
+				notClicked = false;
+				$('html,body').animate({'scrollTop': 0}, options.speed, function() {
+					notClicked = true;
+				});
+			}
+		});
 	};
 
 	// 元素实现，用户自己定制样式和结构.
 	$.fn.gotop = function(options) {
 		// 默认参数.
-		var defaults = {};
+		var defaults = {
+			'trigger': 500
+		};
 		// 合并用户参数.
 		var options = $.extend(defaults, options);
 		// 功能实现.
-		this.each(function() {});
+		this.each(function() {
+
+		});
 	};
 })(jQuery);
