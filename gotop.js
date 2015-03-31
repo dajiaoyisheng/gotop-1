@@ -2,7 +2,7 @@
  *  Copyright (c) 2015 Scrd (https://github.com/shenchao890216)
  *  Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  *
- *  Version 0.0.1(Beta)
+ *  Version 0.0.2(Beta)
  */
 
 ;(function($) {
@@ -85,13 +85,37 @@
 	$.fn.gotop = function(options) {
 		// 默认参数.
 		var defaults = {
+			'alwaysVisible': false,
 			'trigger': 500
 		};
 		// 合并用户参数.
 		var options = $.extend(defaults, options);
+		// 是否点击了.
+		var notClicked = true;
 		// 功能实现.
-		this.each(function() {
+		return this.each(function() {
+			var _obj = $(this);
 
+			if(!options.alwaysVisible) {
+				$(window).scroll(function() {
+					if($(window).scrollTop() >= options.trigger) {
+						_obj.show();
+					} else {
+						_obj.hide();
+					}
+				});
+			} else {
+				_obj.show();
+			}
+			// 单击事件.
+			_obj.click(function() {
+				if(notClicked) {
+					notClicked = true;
+					$('html,body').animate({'scrollTop': 0}, options.speed, function() {
+						notClicked = true;
+					});
+				}
+			});
 		});
 	};
 })(jQuery);
