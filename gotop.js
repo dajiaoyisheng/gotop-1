@@ -30,6 +30,28 @@
 		var $gotopContainer = $('.' + options.containerClass);
 		$gotopContainer.html('<div class="' + options.arrowClass + '"></div>');
 		var $gotopArrow = $('.' + options.arrowClass);
+
+		// 检查参数.
+		if(options.location != 'right' && options.location != 'left') {
+			options.location = 'right';
+		}
+
+		(options.locationOffset < 0) && (options.locationOffset = 0);
+
+		(options.bottomOffset < 0) && (options.bottomOffset = 0);
+
+		(options.trigger < 0) && (options.trigger = 500);
+
+		(options.containerSize < 20) && (options.containerSize = 20);
+
+		(options.containerRadius < 0) && (options.containerRadius = 0);
+
+		var checkColor = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i;
+		
+		!checkColor.test(options.containerColor) && (options.containerColor = '#000');
+
+		!checkColor.test(options.arrowColor) && (options.arrowColor = '#fff');
+
 		// gotop包裹元素的css样式.
 		var containerStyle = {
 			'position': 'fixed',
